@@ -396,32 +396,33 @@
     </style>
 </head>
 <body>
-    {% block body %}{% endblock %}
+    {% block body %}
     <!-- Genius Mirage Deception Tracker -->
-<script>
-(function(d, t) {
-    var s = d.createElement(t);
-    var timestamp = Date.now();
-    s.src = "http://localhost:8000/api/track/?site=site-1778053763620&token=9199fdfc3326cd3de57deb7a4f1410c3&t=" + timestamp;
-    s.async = true;
-    s.defer = true;
-    var h = d.getElementsByTagName(t)[0];
-    h.parentNode.insertBefore(s, h);
-    
-    window._geniusMirage = window._geniusMirage || {
-        queue: [],
-        site: "site-1778053763620",
-        token: "9199fdfc3326cd3de57deb7a4f1410c3"
-    };
-    
-    window._geniusMirage.queue.push({
-        event: 'pageview',
-        url: window.location.href,
-        referrer: document.referrer,
-        timestamp: timestamp
-    });
-})(document, 'script');
-</script>
-<!-- End Genius Mirage Tracker -->
+    <script>
+    (function(d, t) {
+        var s = d.createElement(t);
+        var timestamp = Date.now();
+        s.src = "http://localhost:8000/api/track/?site=site-1778053763620&token=9199fdfc3326cd3de57deb7a4f1410c3&t=" + timestamp;
+        s.async = true;
+        s.defer = true;
+        var h = d.getElementsByTagName(t)[0];
+        h.parentNode.insertBefore(s, h);
+        
+        window._geniusMirage = window._geniusMirage || {
+            queue: [],
+            site: "site-1778053763620",
+            token: "9199fdfc3326cd3de57deb7a4f1410c3"
+        };
+        
+        window._geniusMirage.queue.push({
+            event: 'pageview',
+            url: window.location.href,
+            referrer: document.referrer,
+            timestamp: timestamp
+        });
+    })(document, 'script');
+    </script>
+    <!-- End Genius Mirage Tracker -->
+    {% endblock %}
 </body>
 </html>
