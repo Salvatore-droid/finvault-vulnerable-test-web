@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block body %}
+<div class="auth-shell">
+  <div class="auth-box">
+    <div class="auth-logo">
+      <h1>FinVault</h1>
+      <p>Secure Banking Portal &mdash; East Africa</p>
+    </div>
+
+    <div class="auth-card">
+      <p class="card-title">Sign in to your account</p>
+
+      {% if error %}
+      <div class="alert alert-error">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+        </svg>
+        {{ error }}
+      </div>
+      {% endif %}
+
+      <form method="POST" action="/login">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username"
+                 placeholder="Enter your username" autocomplete="username" required/>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password"
+                 placeholder="Enter your password" autocomplete="current-password" required/>
+        </div>
+        <button type="submit" class="btn-primary">Sign In</button>
+      </form>
+
+      <div class="divider"></div>
+
+      <div class="alert alert-info" style="font-size:.78rem;">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 110 20A10 10 0 0112 2z"/>
+        </svg>
+        Demo credentials — <strong>jdoe / password1</strong> &nbsp;|&nbsp; <strong>admin / admin123</strong>
+      </div>
+    </div>
+
+    <div class="auth-footer">
+      Don't have an account? <a href="/register">Create one</a>
+    </div>
+    <div class="auth-footer" style="margin-top:.5rem; font-size:.72rem; opacity:.5;">
+      &copy; 2024 FinVault Ltd. All rights reserved. Regulated by CBK.
+    </div>
+  </div>
+</div>
+{% endblock %}

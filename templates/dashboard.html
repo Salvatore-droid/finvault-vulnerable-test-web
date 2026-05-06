@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block body %}
+
+<nav>
+  <a class="nav-brand" href="/dashboard">Fin<span>Vault</span></a>
+  <div class="nav-links">
+    <a href="/dashboard" class="active">Dashboard</a>
+    <a href="/transactions">Transactions</a>
+    <a href="/profile">Profile</a>
+    {% if session.role == 'admin' %}
+    <a href="/admin/audit" style="color:var(--warning);">Audit Log</a>
+    {% endif %}
+    <span class="badge badge-{{ session.role }}">{{ session.role }}</span>
+    <form action="/logout" method="GET" style="display:inline">
+      <button class="btn-logout">Logout</button>
+    </form>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="page-header">
+    <h1>Good day, {{ session.full_name.split()[0] }}</h1>
+    <p>Here's your financial overview for today</p>
+  </div>
+
+  <!-- Account Cards -->
+  <div class="card-title">Your Accounts</div>
+  {% if accounts %}
+  <div class="grid-3" style="margin-bottom:2rem">
+    {% for acc in accounts %}
+    <div class="account-card">
+      <div class="account-type">{{ acc.type }}</div>
+      <div class="account-no">{{ acc.account_no }}</div>
+      <div class="account-balance">
+        {% if acc.balance >= 0 %}
+          {{ "{:,.2f}".format(acc.balance) }}
+        {% else %}
+          -{{ "{:,.2f}".format(acc.balance|abs) }}
+        {% endif %}
+      </div>
+      <div class="account-currency">{{ acc.currency }}</div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="alert alert-info">No accounts found.</div>
+  {% endif %}
+
+  <!-- Recent Transactions -->
+  <div class="card">
+    <p class="card-title">Recent Transactions</p>
+    {% if transactions %}
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Type</th>
+            <th style="text-align:right">Amount (USD)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for txn in transactions[:10] %}
+          <tr>
+            <td class="mono text-muted">{{ txn.created_at[:10] }}</td>
+            <td>{{ txn.description }}</td>
+            <td>
+              <span class="tag {% if txn.type == 'credit' %}tag-savings{% else %}tag-current{% endif %}">
+                {{ txn.type }}
+              </span>
+            </td>
+            <td style="text-align:right" class="mono {% if txn.type == 'credit' %}credit{% else %}debit{% endif %}">
+              {% if txn.type == 'credit' %}+{% else %}-{% endif %}{{ "{:,.2f}".format(txn.amount) }}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top:1rem;text-align:right">
+      <a href="/transactions" style="color:var(--accent);font-size:.82rem;text-decoration:none;">
+        View all transactions →
+      </a>
+    </div>
+    {% else %}
+    <div class="text-muted">No transactions yet.</div>
+    {% endif %}
+  </div>
+
+  <!-- Quick stats -->
+  <div class="stat-row">
+    <div class="stat">
+      <div class="stat-label">Total Accounts</div>
+      <div class="stat-value">{{ accounts|length }}</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Total Transactions</div>
+      <div class="stat-value">{{ transactions|length }}</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Net Balance (USD)</div>
+      <div class="stat-value">{{ "{:,.0f}".format(accounts|sum(attribute='balance')) }}</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Session User</div>
+      <div class="stat-value" style="font-family:'DM Mono',monospace;font-size:1rem;">{{ session.username }}</div>
+    </div>
+  </div>
+</div>
+{% endblock %}
